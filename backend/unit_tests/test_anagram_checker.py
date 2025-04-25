@@ -6,5 +6,3 @@ class TestAnagramChecker:
         assert IsAnagram.is_anagram("nuf") == False
         assert IsAnagram.is_anagram("123") == True
         assert IsAnagram.is_anagram("123") == False
-
-

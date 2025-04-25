@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anagram Checker</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f5f5f5; display: flex; flex-direction: column; align-items: center; padding: 50px;">
+
+    <h1 style="color: #333; font-size: 2.5rem; margin-bottom: 30px;">🔁 Anagram Checker</h1>
+    <div style="display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px;">
+    <!-- Input fields for the strings -->
+    <input
+            type="text"
+            id="inputString1"
+            placeholder="Enter first word"
+            style="padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px;"
+        />
+    <input
+        type="text"
+        id="inputString2"
+        placeholder="Enter second word"
+        style="padding: 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px;"
+    />
+    <!-- Button to send request -->
+    <button
+        id="checkButton"
+        style="padding: 12px; font-size: 1rem; background-color: #007BFF; color: white; border: none; border-radius: 6px; cursor: pointer;"
+    >
+        Check if the words are anagrams!
+    </button>
+    <!-- Result display -->
+    <div id="result" style="
+    margin-top: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    max-width: 400px;
+    transition: background-color 0.3s ease;"
+    >
+    </div>
+
+    <script>
+        // Wait for the DOM to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkButton = document.getElementById('checkButton');
+            const resultDiv = document.getElementById('result');
+
+            // Add event listener to the button
+            checkButton.addEventListener('click', async function() {
+                const string1 = document.getElementById('inputString1').value;
+                const string2 = document.getElementById('inputString2').value;
+
+                // Make the POST request to the backend
+                try {
+                    const response = await fetch('http://localhost:8000/is-anagram', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            str1: string1,
+                            str2: string2
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    // Handle response based on the backend result
+                    if (data.is_anagram === true) {
+                        resultDiv.textContent = "Yes, they are anagrams!"
+                        resultDiv.style.backgroundColor = "#4CAF50";
+
+                    } else {
+                        resultDiv.textContent = "No, they are not anagrams.";
+                        resultDiv.style.backgroundColor = "#F44336";
+                    }
+                } catch (error) {
+                    resultDiv.textContent = "An error occurred: " + error.message;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
